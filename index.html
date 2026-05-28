@@ -16,8 +16,8 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
     margin:0;
     padding:0;
     box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
     font-family:Arial,sans-serif;
+    -webkit-tap-highlight-color:transparent;
 }
 
 body{
@@ -44,7 +44,7 @@ body{
     color:white;
 }
 
-/* Карточка */
+/* КАРТОЧКА */
 
 .card{
 
@@ -68,7 +68,7 @@ body{
     z-index:2;
 }
 
-/* Заголовок */
+/* ЗАГОЛОВОК */
 
 h1{
 
@@ -79,7 +79,7 @@ h1{
     margin-bottom:15px;
 }
 
-/* Поцелуй */
+/* ПОЦЕЛУЙ */
 
 .kiss{
 
@@ -116,7 +116,7 @@ h1{
 
 }
 
-/* Текст */
+/* ТЕКСТ */
 
 #lyrics{
 
@@ -128,16 +128,16 @@ h1{
 
     color:#fff0f5;
 
-    min-height:140px;
+    min-height:160px;
 
     opacity:0;
 
-    transition:0.4s;
+    transition:0.15s linear;
 
     padding:10px;
 }
 
-/* Телефон */
+/* ТЕЛЕФОН */
 
 @media(max-width:480px){
 
@@ -155,12 +155,12 @@ h1{
 
     #lyrics{
         font-size:20px;
-        min-height:130px;
+        min-height:150px;
     }
 
 }
 
-/* Сердца */
+/* СЕРДЦА */
 
 .heart{
 
@@ -227,58 +227,73 @@ webkit-playsinline
 
 <script>
 
-/* СИНХРОННЫЙ ТЕКСТ */
+/* ТАЙМКОДЫ */
 
 const lyricsData = [
 
 {
-    time:0.0,
+    time:0,
     text:"В свете фонаря блестит асфальт ✨"
 },
 
 {
-    time:3.8,
+    time:1,
     text:"Я люблю тебя — ты просто знай 💖"
 },
 
 {
-    time:7.4,
+    time:3,
     text:"Сдаётся мне, теперь это надолго 🌙"
 },
 
 {
-    time:11.5,
+    time:6,
     text:"Гори! Гори, не догорай 🔥"
 },
 
 {
-    time:15.0,
+    time:8,
     text:"Без тебя жизни нет — я не могу найти 💔"
 },
 
 {
-    time:19.8,
-    text:"Сколько не жмись к стене 🥀"
+    time:11,
+    text:"Сколько не жмись к стене, сквозь неё не пройти 🥀"
 },
 
 {
-    time:22.5,
-    text:"Сквозь неё не пройти ❄️"
+    time:14,
+    text:"Ни одного пути грешной души в зиме ❄️"
 },
 
 {
-    time:24.8,
-    text:"Ни одного пути грешной души в зиме 🌌"
+    time:17,
+    text:"Без тебя смысла нет; без тебя жизни нет ❤️"
 },
 
 {
-    time:29.5,
-    text:"Без тебя смысла нет ❤️"
+    time:19,
+    text:"Сколько не жмись к стене, сквозь неё не пройти 🌌"
 },
 
 {
-    time:32.8,
-    text:"Без тебя жизни нет 💞"
+    time:22,
+    text:"Без тебя жизни нет. Я не могу найти 💞"
+},
+
+{
+    time:24,
+    text:"Ни одного пути грешной души в зиме 🌙"
+},
+
+{
+    time:26,
+    text:"Без тебя смысла нет; без тебя жизни нет ❤️"
+},
+
+{
+    time:28,
+    text:"Жизни нет 💔"
 }
 
 ];
@@ -297,8 +312,6 @@ async function startLove(){
     const lyrics =
     document.getElementById("lyrics");
 
-    /* СТАРТ С НУЛЯ */
-
     music.pause();
 
     music.currentTime = 0;
@@ -313,15 +326,14 @@ async function startLove(){
 
         console.log(err);
 
-        alert("Нажми ещё раз 💖");
     }
 
-    /* ИДЕАЛЬНЫЙ СИНХРОН */
+    /* ТОЧНЫЙ СИНХРОН */
 
-    music.addEventListener("timeupdate", () => {
+    function updateLyrics(){
 
         const current =
-        Number(music.currentTime.toFixed(1));
+        music.currentTime;
 
         for(
             let i = lyricsData.length - 1;
@@ -331,15 +343,29 @@ async function startLove(){
 
             if(current >= lyricsData[i].time){
 
-                lyrics.innerText =
-                lyricsData[i].text;
+                if(
+                    lyrics.innerText !==
+                    lyricsData[i].text
+                ){
+
+                    lyrics.innerText =
+                    lyricsData[i].text;
+                }
 
                 break;
             }
         }
 
-    });
+        if(!music.paused){
 
+            requestAnimationFrame(
+                updateLyrics
+            );
+        }
+
+    }
+
+    updateLyrics();
 }
 
 /* ЛЕТАЮЩИЕ СЕРДЦА */
